@@ -9,21 +9,27 @@ char board[ROWS][COLOMNS];
 char header[] = "-----------------------------";
 char grids[] = "|---|---|---|---|---|---|---|";
 char color = '1';
+char player1[30];
+char player2[30];
 
 int main()
 {
+    printf("\n Please enter your name player 1: ");
+    scanf("%s", &player1);
+    printf("\n Please enter your name player 2: ");
+    scanf("%s", &player2);
     init_board();
     printBoard();
 
     while (1)
     {
-        printf("Player %c, your turn!\n", color);
+        printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
         choose();
         printf("\n\n");
         printBoard();
         if (check())
         {
-            printf("\n Player  %c wins! \n", color);
+            printf("\n Player  %s wins! \n", (color == '1') ? player1 : player2);
             break;
         }
         Color();
@@ -32,12 +38,10 @@ int main()
     return 0;
 }
 
-
 void Color()
 {
     color = (color == '1') ? '2' : '1';
 }
-
 
 void init_board()
 {
@@ -114,7 +118,8 @@ void choose()
 int fill_bin(int colomn)
 {
     int fail = -1;
-    if (colomn == -1) return fail;
+    if (colomn == -1)
+        return fail;
     int level;
 
     for (level = ROWS - 1; level >= 0; level--)
@@ -131,7 +136,8 @@ int fill_bin(int colomn)
     return fail;
 }
 
-int checkVertical(){
+int checkVertical()
+{
     int i, j, k;
     int count = 0;
 
@@ -151,8 +157,8 @@ int checkVertical(){
     }
 }
 
-
-int checkHorizental(){
+int checkHorizental()
+{
     int i, j, k;
     int count = 0;
     for (i = ROWS - 1; i >= 0; i--)
@@ -171,7 +177,8 @@ int checkHorizental(){
     }
 }
 
-int checkOblique(){
+int checkOblique()
+{
     int i, j, k;
     int count = 0;
 
