@@ -18,9 +18,9 @@ char color;
 int main()
 {
     printf("\n Please enter your name player 1: ");
-    scanf("%s", &player1);
+    scanf_s("%s", &player1);
     printf("\n Please enter your name player 2: ");
-    scanf("%s", &player2);
+    scanf_s("%s", &player2);
     printf("\n %s is Heads %s is Tales \n",player1,player2);
     printf("Tossing coin ....");
     int toss = time(0) % 2;
@@ -105,7 +105,7 @@ void choose()
     while (colomn == -1)
     {
         printf("\nChoose colomn: ");
-        scanf(" %c", &c);
+        scanf_s(" %c", &c);
         switch (c)
         {
         case '1':
