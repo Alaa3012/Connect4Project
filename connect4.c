@@ -8,7 +8,6 @@
 
 char board[ROWS][COLUMNS];
 char header[] = "-----------------------------";
-char grids[] = "|---|---|---|---|---|---|---|";
 char player1[30];
 char player2[30];
 clock_t player1Time=0;
@@ -24,10 +23,10 @@ int main()
     printf("\n Please enter your name player 2: ");
     scanf_s("%s", &player2);
     printf("\n %s is Heads %s is Tales \n",player1,player2);
-    printf("Tossing coin ....");
+    printf("Tossing coin ....\n");
     int toss = time(0) % 2;
     if(toss ==0){
-        printf("Heads: %s starts",player1);
+        printf("Heads: %s starts\n",player1);
         color = '1';
     } 
     else{
@@ -85,7 +84,6 @@ void printBoard()
 {
     // print the board and the board according to current game:
     printf("%s\n", header);
-    printf("%s\n", grids);
 
     int i, j;
 
@@ -94,10 +92,11 @@ void printBoard()
         for (j = 0; j < COLUMNS; j++)
         {
             printf("| %c ", board[i][j]);
+            
         }
         printf("|\n");
-        printf("%s\n", grids);
     }
+    printf("%s\n", header);
 }
 
 void choose()
@@ -138,9 +137,15 @@ void choose()
         column = (fill_bin(column) == 1) ? 1 : -1;
     }
 }
+<<<<<<< HEAD
 //Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
 //Effects: Fills out the board where it is required.
 int fill_bin(int column)
+=======
+// Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+// Effects: Fills out the board where it is required.
+int fill_bin(int colomn)
+>>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
     int fail = -1;
     if (column == -1)
@@ -160,8 +165,8 @@ int fill_bin(int column)
         printf("This column is full! Please choose another one");
     return fail;
 }
-//Requires: Nothing.
-//Effects: Checks if the winning condition is satisfied vertically.
+// Requires: Nothing.
+// Effects: Checks if the winning condition is satisfied vertically.
 int checkVertical()
 {
     int i, j;
@@ -182,9 +187,15 @@ int checkVertical()
         }
     }
 }
+<<<<<<< HEAD
 //Requires: Nothing.
 //Effects: Checks if the winning condition is satisfied horizontally.
 int checkHorizontal()
+=======
+// Requires: Nothing.
+// Effects: Checks if the winning condition is satisfied horizentally.
+int checkHorizental()
+>>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
     int i, j;
     int count = 0;
@@ -203,8 +214,8 @@ int checkHorizontal()
         }
     }
 }
-//Requires: Nothing.
-//Effects: Checks if the winning condition is satisfied Obliquely.
+// Requires: Nothing.
+// Effects: Checks if the winning condition is satisfied Obliquely.
 int checkOblique()
 {
     int i, j;
@@ -274,8 +285,8 @@ int checkOblique()
 
     return 0;
 }
-//Requires: Nothing.
-//Effects: Check if a player has won.
+// Requires: Nothing.
+// Effects: Check if a player has won.
 int check()
 {
     return checkHorizontal() || checkVertical() || checkOblique();

@@ -6,7 +6,7 @@ void printBoard();
 void choose();
 int fill_bin();
 void Color();
-int checkVertical() ;
+int checkVertical();
 int checkHorizental();
 int checkOblique();
 int check();
