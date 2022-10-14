@@ -11,29 +11,27 @@ char header[] = "-----------------------------";
 char grids[] = "|  |  |  |  |  |  |  |";
 char player1[30];
 char player2[30];
-clock_t player1Time = 0;
-clock_t player2Time = 0;
+clock_t player1Time=0;
+clock_t player2Time=0;
 char color;
 
 int main()
 {
     printf("\n Please enter your name player 1: ");
-    scanf("%s", &player1);
+    scanf_s("%s", &player1);
     printf("\n Please enter your name player 2: ");
-    scanf("%s", &player2);
-    printf("\n %s is Heads %s is Tales \n", player1, player2);
-    printf("Tossing coin.... \n");
+    scanf_s("%s", &player2);
+    printf("\n %s is Heads %s is Tales \n",player1,player2);
+    printf("Tossing coin ....\n");
     int toss = time(0) % 2;
-    if (toss == 0)
-    {
-        printf("Heads: %s starts\n", player1);
+    if(toss ==0){
+        printf("Heads: %s starts\n",player1);
         color = '1';
-    }
-    else
-    {
-        printf("Tales: %s starts\n", player2);
+    } 
+    else{
+        printf("Tales: %s starts\n",player2);
         color = '2';
-    }
+    } 
     init_board();
     printBoard();
 
@@ -43,10 +41,8 @@ int main()
         clock_t before = clock();
         choose();
         clock_t diff = clock() - before;
-        if (color == '1')
-            player1Time += diff;
-        else
-            player2Time += diff;
+        if(color == '1') player1Time += diff;
+        else player2Time += diff;
         printf("\n\n");
         printBoard();
         if (check())
@@ -56,9 +52,8 @@ int main()
         }
         Color();
     }
-    if (checkFull())
-    {
-        printf("%s won because his moves was faster.", (player1Time > player2Time) ? player2 : player1);
+    if(checkFull()){
+        printf("%s won because his moves was faster.",(player1Time > player2Time)? player2 : player1);
     }
 
     return 0;
@@ -110,7 +105,7 @@ void choose()
     while (colomn == -1)
     {
         printf("\nChoose colomn: ");
-        scanf(" %c", &c);
+        scanf_s(" %c", &c);
         switch (c)
         {
         case '1':
@@ -284,14 +279,10 @@ int check()
     return checkHorizental() || checkVertical() || checkOblique();
 }
 
-int checkFull()
-{
-    for (int i = 0; i < ROWS; i++)
-    {
-        for (int j = 0; j < COLOMNS; j++)
-        {
-            if (board[i][j] == '0')
-                return 0;
+int checkFull(){
+    for(int i = 0; i < ROWS;i++){
+        for(int j = 0; j < COLOMNS; j++){
+            if(board[i][j] == '0') return 0;
         }
     }
     return 1;
