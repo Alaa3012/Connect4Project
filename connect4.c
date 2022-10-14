@@ -14,8 +14,6 @@ clock_t player1Time=0;
 clock_t player2Time=0;
 char color;
 
-int fill_bin(int column);
-
 int main()
 {
     printf("\n Please enter your name player 1: ");
@@ -137,15 +135,10 @@ void choose()
         column = (fill_bin(column) == 1) ? 1 : -1;
     }
 }
-<<<<<<< HEAD
-//Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
-//Effects: Fills out the board where it is required.
-int fill_bin(int column)
-=======
+
 // Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
 // Effects: Fills out the board where it is required.
 int fill_bin(int column)
->>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
     int fail = -1;
     if (column == -1)
@@ -187,15 +180,10 @@ int checkVertical()
         }
     }
 }
-<<<<<<< HEAD
-//Requires: Nothing.
-//Effects: Checks if the winning condition is satisfied horizontally.
-int checkHorizontal()
-=======
+
 // Requires: Nothing.
 // Effects: Checks if the winning condition is satisfied horizontally.
 int checkHorizontal()
->>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
     int i, j;
     int count = 0;
