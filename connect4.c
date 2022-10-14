@@ -4,15 +4,17 @@
 
 #define FOUR 4
 #define ROWS 6
-#define COLOMNS 7
+#define COLUMNS 7
 
-char board[ROWS][COLOMNS];
+char board[ROWS][COLUMNS];
 char header[] = "-----------------------------";
 char player1[30];
 char player2[30];
 clock_t player1Time=0;
 clock_t player2Time=0;
 char color;
+
+int fill_bin(int column);
 
 int main()
 {
@@ -70,7 +72,7 @@ void init_board()
 
     for (i = 0; i < ROWS; i++)
     {
-        for (j = 0; j < COLOMNS; j++)
+        for (j = 0; j < COLUMNS; j++)
         {
             board[i][j] = '0';
         }
@@ -87,7 +89,7 @@ void printBoard()
 
     for (i = 0; i < ROWS; i++)
     {
-        for (j = 0; j < COLOMNS; j++)
+        for (j = 0; j < COLUMNS; j++)
         {
             printf("| %c ", board[i][j]);
             
@@ -107,39 +109,39 @@ void printBoard()
 void choose()
 {
     char c;
-    int colomn = -1;
-    while (colomn == -1)
+    int column = -1;
+    while (column == -1)
     {
-        printf("\nChoose colomn: ");
+        printf("\nChoose column: ");
         scanf_s(" %c", &c);
-        switch (c)
+        switch (c) // Switch case used to avoid unwanted inputs from being used.
         {
         case '1':
-            colomn = 0;
+            column = 0;
             break;
         case '2':
-            colomn = 1;
+            column = 1;
             break;
         case '3':
-            colomn = 2;
+            column = 2;
             break;
         case '4':
-            colomn = 3;
+            column = 3;
             break;
         case '5':
-            colomn = 4;
+            column = 4;
             break;
         case '6':
-            colomn = 5;
+            column = 5;
             break;
         case '7':
-            colomn = 6;
+            column = 6;
             break;
         default:
-            printf("\nWrong colomn number\n");
+            printf("\nWrong column number\n");
             printBoard();
         }
-        colomn = (fill_bin(colomn) == 1) ? 1 : -1;
+        column = (fill_bin(column) == 1) ? 1 : -1;
     }
 }
 /*
@@ -147,23 +149,24 @@ void choose()
     Effects: Fills out the board where it is required.
 */
 int fill_bin(int colomn)
+>>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
     int fail = -1;
-    if (colomn == -1)
+    if (column == -1)
         return fail;
     int level;
 
     for (level = ROWS - 1; level >= 0; level--)
     {
-        if (board[level][colomn] == '0')
+        if (board[level][column] == '0')
         {
-            board[level][colomn] = color;
+            board[level][column] = color;
             fail = 1;
             break;
         }
     }
     if (fail == -1)
-        printf("This colomn is full! Please choose another one");
+        printf("This column is full! Please choose another one");
     return fail;
 }
 /*
@@ -172,10 +175,10 @@ int fill_bin(int colomn)
 */
 int checkVertical()
 {
-    int i, j, k;
+    int i, j;
     int count = 0;
 
-    for (j = 0; j < COLOMNS; j++)
+    for (j = 0; j < COLUMNS; j++)
     {
         for (i = ROWS - 1; i >= 0; i--)
         {
@@ -195,14 +198,15 @@ int checkVertical()
     Effects: Checks if the winning condition is satisfied horizentally.
 */
 int checkHorizental()
+>>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
-    int i, j, k;
+    int i, j;
     int count = 0;
     for (i = ROWS - 1; i >= 0; i--)
     {
-        for (j = 0; j < COLOMNS; j++)
+        for (j = 0; j < COLUMNS; j++)
         {
-            if (count + (COLOMNS - j) < FOUR)
+            if (count + (COLUMNS - j) < FOUR) // If Columns are less than 4, then no one can win horizontally.
                 return 0;
             if (count == FOUR)
                 return 1;
@@ -221,13 +225,13 @@ int checkHorizental()
 
 int checkOblique()
 {
-    int i, j, k;
-    int count = 0;
+    int i, j;
+    int count;
 
     int ii, jj;
     for (i = 1; i < ROWS - 1; i++)
     {
-        for (j = 1; j < COLOMNS - 1; j++)
+        for (j = 1; j < COLUMNS - 1; j++)
         {
 
             /* 
@@ -249,7 +253,7 @@ int checkOblique()
 
 
             // right-downwards:
-            for (ii = i + 1, jj = j + 1; (ii <= ROWS - 1) || (jj <= COLOMNS - 1); ii++, jj++)
+            for (ii = i + 1, jj = j + 1; (ii <= ROWS - 1) || (jj <= COLUMNS - 1); ii++, jj++)
             {
                 if (board[ii][jj] == color)
                 {
@@ -279,7 +283,7 @@ int checkOblique()
             }
 
             // right-upwards:
-            for (ii = i - 1, jj = j + 1; (ii >= 0) || (jj <= COLOMNS - 1); ii--, j++)
+            for (ii = i - 1, jj = j + 1; (ii >= 0) || (jj <= COLUMNS - 1); ii--, j++)
             {
                 if (board[ii][jj] == color)
                 {
@@ -301,7 +305,7 @@ int checkOblique()
 
 int check()
 {
-    return checkHorizental() || checkVertical() || checkOblique();
+    return checkHorizontal() || checkVertical() || checkOblique();
 }
 
 /*
@@ -312,7 +316,7 @@ int check()
 
 int checkFull(){
     for(int i = 0; i < ROWS;i++){
-        for(int j = 0; j < COLOMNS; j++){
+        for(int j = 0; j < COLUMNS; j++){
             if(board[i][j] == '0') return 0;
         }
     }
