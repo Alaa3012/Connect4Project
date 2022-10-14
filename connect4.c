@@ -8,10 +8,9 @@
 char board[ROWS][COLOMNS];
 char header[] = "-----------------------------";
 char grids[] = "|---|---|---|---|---|---|---|";
-char color = '1';
 char player1[30];
 char player2[30];
-
+int color;
 
 int main()
 {
@@ -19,18 +18,24 @@ int main()
     scanf("%s", &player1);
     printf("\n Please enter your name player 2: ");
     scanf("%s", &player2);
+    printf("\n Player 1 is Heads Player 2 is Tales \n");
+    printf("Tossing coin ....");
+    int toss = time(0) % 2;
+    if(toss ==0) printf("Heads: %s starts",player1);
+    else printf("Tales: %s starts\n",player2);
+    color = toss;
     init_board();
     printBoard();
 
     while (1)
     {
-        printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
+        printf("Player %s, your turn!\n", (color == 0) ? player1 : player2);
         choose();
         printf("\n\n");
         printBoard();
         if (check())
         {
-            printf("\n Player  %s wins! \n", (color == '1') ? player1 : player2);
+            printf("\n Player  %s wins! \n", (color == 0) ? player1 : player2);
             break;
         }
         Color();
@@ -41,7 +46,7 @@ int main()
 
 void Color()
 {
-    color = (color == '1') ? '2' : '1';
+    color = !color;
 }
 
 void init_board()

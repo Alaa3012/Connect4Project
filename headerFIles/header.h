@@ -1,5 +1,6 @@
 #ifndef Header
 #define Header
+int time();
 void init_board();
 void test_board();
 void printBoard();
