@@ -12,6 +12,7 @@ char color = '1';
 char player1[30];
 char player2[30];
 
+
 int main()
 {
     printf("\n Please enter your name player 1: ");
@@ -56,7 +57,8 @@ void init_board()
         }
     }
 }
-
+//Requires: Nothing 
+//Effects: prints out the table formated.
 void printBoard()
 {
     // print the board and the board according to current game:
@@ -114,7 +116,8 @@ void choose()
         colomn = (fill_bin(colomn) == 1) ? 1 : -1;
     }
 }
-
+//Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+//Effects: Fills out the board where it is required.
 int fill_bin(int colomn)
 {
     int fail = -1;
@@ -132,10 +135,11 @@ int fill_bin(int colomn)
         }
     }
     if (fail == -1)
-        printf("This colomn is full! Please chose another one");
+        printf("This colomn is full! Please choose another one");
     return fail;
 }
-
+//Requires: Nothing.
+//Effects: Checks if the winning condition is satisfied vertically.
 int checkVertical()
 {
     int i, j, k;
@@ -156,7 +160,8 @@ int checkVertical()
         }
     }
 }
-
+//Requires: Nothing.
+//Effects: Checks if the winning condition is satisfied horizentally.
 int checkHorizental()
 {
     int i, j, k;
@@ -176,7 +181,8 @@ int checkHorizental()
         }
     }
 }
-
+//Requires: Nothing.
+//Effects: Checks if the winning condition is satisfied Obliquely.
 int checkOblique()
 {
     int i, j, k;
@@ -246,7 +252,8 @@ int checkOblique()
 
     return 0;
 }
-
+//Requires: Nothing.
+//Effects: Check if a player has won.
 int check()
 {
     return checkHorizental() || checkVertical() || checkOblique();
