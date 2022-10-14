@@ -97,6 +97,13 @@ void printBoard()
     printf("%s\n", header);
 }
 
+
+/* 
+    requires(nothing)
+    switch cases are used to filter out all unwanted user inputs 
+    error--> returns -1
+    else --> returns colomn number to write to
+*/
 void choose()
 {
     char c;
@@ -135,8 +142,10 @@ void choose()
         colomn = (fill_bin(colomn) == 1) ? 1 : -1;
     }
 }
-// Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
-// Effects: Fills out the board where it is required.
+/*
+    Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+    Effects: Fills out the board where it is required.
+*/
 int fill_bin(int colomn)
 {
     int fail = -1;
@@ -157,8 +166,10 @@ int fill_bin(int colomn)
         printf("This colomn is full! Please choose another one");
     return fail;
 }
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied vertically.
+/*
+    Requires: Nothing.
+   Effects: Checks if the winning condition is satisfied vertically.
+*/
 int checkVertical()
 {
     int i, j, k;
@@ -179,8 +190,10 @@ int checkVertical()
         }
     }
 }
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied horizentally.
+/*
+    Requires: Nothing
+    Effects: Checks if the winning condition is satisfied horizentally.
+*/
 int checkHorizental()
 {
     int i, j, k;
@@ -200,8 +213,12 @@ int checkHorizental()
         }
     }
 }
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied Obliquely.
+
+/* 
+    Requires: Nothing// 
+    Effects: Checks if the winning condition is satisfied Obliquely.
+*/
+
 int checkOblique()
 {
     int i, j, k;
@@ -213,70 +230,85 @@ int checkOblique()
         for (j = 1; j < COLOMNS - 1; j++)
         {
 
-            /* left-tilted diagonals */
+            /* 
+
+                    left diagonals 
+                    
+            */
             count = 0;
+
             // left-upwards:
             for (ii = i, jj = j; (ii >= 0) || (jj >= 0); ii--, jj--)
             {
                 if (board[ii][jj] == color)
                 {
                     count++;
-                    if (count == FOUR)
-                        return 1;
-                }
-                else
-                    break;
+                    if (count == FOUR) return 1;
+                } else break;
             }
+
+
             // right-downwards:
             for (ii = i + 1, jj = j + 1; (ii <= ROWS - 1) || (jj <= COLOMNS - 1); ii++, jj++)
             {
                 if (board[ii][jj] == color)
                 {
                     count++;
-                    if (count == FOUR)
-                        return 1;
+                    if (count == FOUR) return 1;
                 }
-                else
-                    break;
+                else break;
             }
 
-            /* right-tilted diagonals */
+            /* 
+
+                    right diagonals 
+
+            */
+
             count = 0;
+
             // left-downwards:
             for (ii = i, jj = j; (ii <= ROWS - 1) || (jj >= 0); ii++, jj--)
             {
                 if (board[ii][jj] == color)
                 {
                     count++;
-                    if (count == FOUR)
-                        return 1;
+                    if (count == FOUR)  return 1;
                 }
-                else
-                    break;
+                else break;
             }
+
             // right-upwards:
             for (ii = i - 1, jj = j + 1; (ii >= 0) || (jj <= COLOMNS - 1); ii--, j++)
             {
                 if (board[ii][jj] == color)
                 {
                     count++;
-                    if (count == FOUR)
-                        return 1;
+                    if (count == FOUR) return 1;
                 }
-                else
-                    break;
+                else break;
             }
         }
     }
 
     return 0;
 }
-// Requires: Nothing.
-// Effects: Check if a player has won.
+
+/*
+    Requires: Nothing.
+    Effects: Check if a player has won.
+*/
+
 int check()
 {
     return checkHorizental() || checkVertical() || checkOblique();
 }
+
+/*
+    requires nothing
+    checks if the board is full 
+    board is fulll --> returns 1
+*/
 
 int checkFull(){
     for(int i = 0; i < ROWS;i++){
