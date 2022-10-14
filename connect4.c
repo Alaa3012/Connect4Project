@@ -23,9 +23,8 @@ int main()
     printf("\n %s is Heads %s is Tales \n", player1, player2);
     printf("Tossing coin ....\n");
     int toss = time(0) % 2;
-    if (toss == 0)
-    {
-        printf("Heads: %s starts\n", player1);
+    if(toss ==0){ // decides who gets to play first.
+        printf("Heads: %s starts\n",player1);
         color = '1';
     }
     else
@@ -41,19 +40,17 @@ int main()
         printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
         clock_t before = clock();
         choose();
-        clock_t diff = clock() - before;
-        if (color == '1')
-            player1Time += diff;
-        else
-            player2Time += diff;
+        clock_t diff = clock() - before; // records time taken by the player.
+        if(color == '1') player1Time += diff; // adds time taken.
+        else player2Time += diff;
         printf("\n\n");
         printBoard();
-        if (check())
+        if (check()) // checks if a player has won or not.
         {
             printf("\n Player  %s wins! \n", (color == '1') ? player1 : player2);
             break;
         }
-        Color();
+        Color(); // switches colors for next turn.
     }
     if (checkFull())
     {
@@ -65,7 +62,7 @@ int main()
 
 void Color()
 {
-    color = (color == '1') ? '2' : '1';
+    color = (color == '1') ? '2' : '1'; // switches between colors for each round.
 }
 
 void init_board()
@@ -105,7 +102,7 @@ void choose()
 {
     int c;
     int column = -1;
-    while (column == -1)
+    while (column == -1) // as long as we haven't found an empty square yet.
     {
         printf("\nChoose column: ");
         scanf_s("%d", &c);
@@ -132,14 +129,14 @@ int fill_bin(int column)
 
     for (level = ROWS - 1; level >= 0; level--)
     {
-        if (board[level][column] == '0')
+        if (board[level][column] == '0') // checks for an empty square from the bottom up in the column.
         {
             board[level][column] = color;
             fail = 1;
             break;
         }
     }
-    if (fail == -1)
+    if (fail == -1) // if fail == -1, that means no empty square was found in that column.
         printf("This column is full! Please choose another one");
     return fail;
 }
@@ -189,7 +186,7 @@ int checkHorizontal()
 }
 // Requires: Nothing.
 // Effects: Checks if the winning condition is satisfied Obliquely.
-int checkOblique()
+int checkOblique() // tests both orientations each in both directions.
 {
     int i, j;
     int count;
@@ -262,18 +259,14 @@ int checkOblique()
 // Effects: Check if a player has won.
 int check()
 {
-    return checkHorizontal() || checkVertical() || checkOblique();
+    return checkHorizontal() || checkVertical() || checkOblique(); // player wins if either of these are satisfied.
 }
 
-int checkFull()
-{
-    for (int i = 0; i < ROWS; i++)
-    {
-        for (int j = 0; j < COLUMNS; j++)
-        {
-            if (board[i][j] == '0')
-                return 0;
+int checkFull(){
+    for(int i = 0; i < ROWS;i++){
+        for(int j = 0; j < COLUMNS; j++){
+            if(board[i][j] == '0') return 0; // if one square is equal to 0, then the board is not full
         }
     }
-    return 1;
+    return 1; // all squares are full.
 }
