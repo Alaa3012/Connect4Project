@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "./headerFiles/header.h"
+#include <time.h>
 
 #define FOUR 4
 #define ROWS 6
@@ -11,6 +12,8 @@ char grids[] = "|---|---|---|---|---|---|---|";
 char color = '1';
 char player1[30];
 char player2[30];
+clock_t player1Time=0;
+clock_t player2Time=0;
 
 
 int main()
@@ -22,10 +25,14 @@ int main()
     init_board();
     printBoard();
 
-    while (1)
+    while (!checkFull())
     {
         printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
+        clock_t before = clock();
         choose();
+        clock_t diff = clock() - before;
+        if(color == '1') player1Time += diff;
+        else player2Time += diff;
         printf("\n\n");
         printBoard();
         if (check())
@@ -34,6 +41,9 @@ int main()
             break;
         }
         Color();
+    }
+    if(checkFull()){
+        printf("%s won because his moves was faster.",(player1Time > player2Time)? player2 : player1);
     }
 
     return 0;
@@ -257,4 +267,13 @@ int checkOblique()
 int check()
 {
     return checkHorizental() || checkVertical() || checkOblique();
+}
+
+int checkFull(){
+    for(int i = 0; i < 6;i++){
+        for(int j = 0; j < 7; j++){
+            if(board[i][j] == '0') return 0;
+        }
+    }
+    return 1;
 }

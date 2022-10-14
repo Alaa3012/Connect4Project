@@ -10,4 +10,5 @@ int checkVertical() ;
 int checkHorizental();
 int checkOblique();
 int check();
+int checkFull();
 #endif
