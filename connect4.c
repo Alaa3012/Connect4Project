@@ -144,10 +144,13 @@ void choose()
         column = (fill_bin(column) == 1) ? 1 : -1;
     }
 }
-/*
-    Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
-    Effects: Fills out the board where it is required.
-*/
+<<<<<<< HEAD
+//Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+//Effects: Fills out the board where it is required.
+int fill_bin(int column)
+=======
+// Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+// Effects: Fills out the board where it is required.
 int fill_bin(int colomn)
 >>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
@@ -193,10 +196,13 @@ int checkVertical()
         }
     }
 }
-/*
-    Requires: Nothing
-    Effects: Checks if the winning condition is satisfied horizentally.
-*/
+<<<<<<< HEAD
+//Requires: Nothing.
+//Effects: Checks if the winning condition is satisfied horizontally.
+int checkHorizontal()
+=======
+// Requires: Nothing.
+// Effects: Checks if the winning condition is satisfied horizentally.
 int checkHorizental()
 >>>>>>> 26d92e99cca3b356e4ea22562074d002808b4169
 {
