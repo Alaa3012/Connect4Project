@@ -78,7 +78,7 @@ void init_board()
     }
 }
 //Requires: Nothing 
-//Effects: prints out the table formated.
+//Effects: prints out the table formatted.
 void printBoard()
 {
     // print the board and the board according to current game:
@@ -169,7 +169,7 @@ int checkVertical()
     {
         for (i = ROWS - 1; i >= 0; i--)
         {
-            if (count + i < FOUR)
+            if (count + i < FOUR) // if ROWS is less than 4, then no one can win vertically.
                 return 0;
             if (count == FOUR)
                 return 1;
