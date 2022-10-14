@@ -13,7 +13,7 @@ char player1[30];
 char player2[30];
 clock_t player1Time=0;
 clock_t player2Time=0;
-int color;
+char color;
 
 int main()
 {
@@ -21,28 +21,33 @@ int main()
     scanf("%s", &player1);
     printf("\n Please enter your name player 2: ");
     scanf("%s", &player2);
-    printf("\n Player 1 is Heads Player 2 is Tales \n");
+    printf("\n %s is Heads %s is Tales \n",player1,player2);
     printf("Tossing coin ....");
     int toss = time(0) % 2;
-    if(toss ==0) printf("Heads: %s starts",player1);
-    else printf("Tales: %s starts\n",player2);
-    color = toss;
+    if(toss ==0){
+        printf("Heads: %s starts",player1);
+        color = '1';
+    } 
+    else{
+        printf("Tales: %s starts\n",player2);
+        color = '2';
+    } 
     init_board();
     printBoard();
 
     while (!checkFull())
     {
-        printf("Player %s, your turn!\n", (color == 0) ? player1 : player2);
+        printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
         clock_t before = clock();
         choose();
         clock_t diff = clock() - before;
-        if(color == 0) player1Time += diff;
+        if(color == '1') player1Time += diff;
         else player2Time += diff;
         printf("\n\n");
         printBoard();
         if (check())
         {
-            printf("\n Player  %s wins! \n", (color == 0) ? player1 : player2);
+            printf("\n Player  %s wins! \n", (color == '1') ? player1 : player2);
             break;
         }
         Color();
