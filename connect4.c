@@ -114,6 +114,7 @@ void choose()
 int fill_bin(int colomn)
 {
     int fail = -1;
+    if (colomn == -1) return fail;
     int level;
 
     for (level = ROWS - 1; level >= 0; level--)
