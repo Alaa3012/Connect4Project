@@ -8,7 +8,6 @@
 
 char board[ROWS][COLOMNS];
 char header[] = "-----------------------------";
-char grids[] = "|  |  |  |  |  |  |  |";
 char player1[30];
 char player2[30];
 clock_t player1Time=0;
