@@ -78,9 +78,11 @@ void init_board()
         }
     }
 }
-// Requires: Nothing
-// Effects: prints out the table formatted.
-void printBoard()
+/*
+ Requires: Nothing
+ Effects: prints out the table formatted.
+*/
+ void printBoard()
 {
     // print the board and the board according to current game:
     printf("%s\n", header);
@@ -98,6 +100,12 @@ void printBoard()
     printf("%s\n", header);
 }
 
+/*
+    requires(nothing)
+    switch cases are used to filter out all unwanted user inputs
+    error--> returns -1
+    else --> returns colomn number to write to
+*/
 void choose()
 {
     int c;
@@ -119,8 +127,10 @@ void choose()
     }
 }
 
-// Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
-// Effects: Fills out the board where it is required.
+/*
+    Requires: The number of the column the player wants to insert to. The number should be between 1 and 7.
+    Effects: Fills out the board where it is required.
+*/
 int fill_bin(int column)
 {
     int fail = -1;
@@ -140,8 +150,10 @@ int fill_bin(int column)
         printf("This column is full! Please choose another one");
     return fail;
 }
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied vertically.
+/*
+    Requires: Nothing.
+   Effects: Checks if the winning condition is satisfied vertically.
+*/
 int checkVertical()
 {
     int i, j;
@@ -163,8 +175,10 @@ int checkVertical()
     }
 }
 
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied horizontally.
+/*
+    Requires: Nothing
+    Effects: Checks if the winning condition is satisfied horizentally.
+*/
 int checkHorizontal()
 {
     int i, j;
@@ -184,9 +198,11 @@ int checkHorizontal()
         }
     }
 }
-// Requires: Nothing.
-// Effects: Checks if the winning condition is satisfied Obliquely.
-int checkOblique() // tests both orientations each in both directions.
+/*
+    Requires: Nothing//
+    Effects: Checks if the winning condition is satisfied Obliquely.
+*/
+int checkOblique()
 {
     int i, j;
     int count;
@@ -197,7 +213,9 @@ int checkOblique() // tests both orientations each in both directions.
         for (j = 1; j < COLUMNS - 1; j++)
         {
 
-            /* left-tilted diagonals */
+            /*
+             left-tilted diagonals
+             */
             count = 0;
             // left-upwards:
             for (ii = i, jj = j; (ii >= 0) || (jj >= 0); ii--, jj--)
@@ -224,7 +242,9 @@ int checkOblique() // tests both orientations each in both directions.
                     break;
             }
 
-            /* right-tilted diagonals */
+            /*
+              right-tilted diagonals
+             */
             count = 0;
             // left-downwards:
             for (ii = i, jj = j; (ii <= ROWS - 1) || (jj >= 0); ii++, jj--)
@@ -255,13 +275,19 @@ int checkOblique() // tests both orientations each in both directions.
 
     return 0;
 }
-// Requires: Nothing.
-// Effects: Check if a player has won.
-int check()
+/*
+ Requires: Nothing.
+ Effects: Check if a player has won.
+*/
+ int check()
 {
     return checkHorizontal() || checkVertical() || checkOblique(); // player wins if either of these are satisfied.
 }
-
+/*
+    requires nothing
+    checks if the board is full
+    board is full --> returns 1
+*/
 int checkFull(){
     for(int i = 0; i < ROWS;i++){
         for(int j = 0; j < COLUMNS; j++){
