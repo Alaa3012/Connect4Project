@@ -38,7 +38,7 @@ int main()
     init_board();
     printBoard();
 
-    while (!checkFull())
+    while (!checkIfFull())
     {
         printf("Player %s, your turn!\n", (color == 1) ? player1 : player2);
         clock_t before = clock();
@@ -53,9 +53,9 @@ int main()
             printf("\n Player  %s wins! \n", (color == 1) ? player1 : player2);
             break;
         }
-        Color(); // switches colors for next turn.
+        Color(); // switch colors for next turn.
     }
-    if (checkFull())
+    if (checkIfFull())
     {
         printf("%s won because his moves was faster.", (player1Time > player2Time) ? player2 : player1);
     }
@@ -126,7 +126,7 @@ void choose()
                 printBoard();
             }
         }
-        else column = bestMove(board,2);
+        else column = Minimax(board, 7, 1)[1];
 
         //checks for filled columns
         column = (fill_bin(column) == 1) ? 1 : -1;
@@ -161,125 +161,170 @@ int fill_bin(int column)
     Requires: Nothing.
    Effects: Checks if the winning condition is satisfied vertically.
 */
-int checkVertical()
-{
-    int i, j;
-    int count = 0;
+//int checkVertical()
+//{
+//    int i, j;
+//    int count = 0;
+//
+//    for (j = 0; j < COLUMNS; j++)
+//    {
+//        for (i = ROWS - 1; i >= 0; i--)
+//        {
+//            if (count + i < FOUR) // if ROWS is less than 4, then no one can win vertically.
+//                return 0;
+//            if (count == FOUR)
+//                return 1;
+//            if (board[i][j] == color)
+//                count++;
+//            else
+//                count = 0;
+//        }
+//    }
+//}
+//
+///*
+//    Requires: Nothing
+//    Effects: Checks if the winning condition is satisfied horizentally.
+//*/
+//int checkHorizontal()
+//{
+//    int i, j;
+//    int count = 0;
+//    for (i = ROWS - 1; i >= 0; i--)
+//    {
+//        for (j = 0; j < COLUMNS; j++)
+//        {
+//            if (count + (COLUMNS - j) < FOUR) // If Columns are less than 4, then no one can win horizontally.
+//                return 0;
+//            if (count == FOUR)
+//                return 1;
+//            if (board[i][j] == color)
+//                count++;
+//            else
+//                count = 0;
+//        }
+//    }
+//}
+///*
+//    Requires: Nothing//
+//    Effects: Checks if the winning condition is satisfied Obliquely.
+//*/
+//int checkOblique()
+//{
+//    int i, j;
+//    int count;
+//
+//    int ii, jj;
+//    for (i = 1; i < ROWS - 1; i++)
+//    {
+//        for (j = 1; j < COLUMNS - 1; j++)
+//        {
+//
+//            /*
+//             left-tilted diagonals
+//             */
+//            count = 0;
+//            // left-upwards:
+//            for (ii = i, jj = j; (ii >= 0) || (jj >= 0); ii--, jj--)
+//            {
+//                if (board[ii][jj] == color)
+//                {
+//                    count++;
+//                    if (count == FOUR)
+//                        return 1;
+//                }
+//                else
+//                    break;
+//            }
+//            // right-downwards:
+//            for (ii = i + 1, jj = j + 1; (ii <= ROWS - 1) || (jj <= COLUMNS - 1); ii++, jj++)
+//            {
+//                if (board[ii][jj] == color)
+//                {
+//                    count++;
+//                    if (count == FOUR)
+//                        return 1;
+//                }
+//                else
+//                    break;
+//            }
+//
+//            /*
+//              right-tilted diagonals
+//             */
+//            count = 0;
+//            // left-downwards:
+//            for (ii = i, jj = j; (ii <= ROWS - 1) || (jj >= 0); ii++, jj--)
+//            {
+//                if (board[ii][jj] == color)
+//                {
+//                    count++;
+//                    if (count == FOUR)
+//                        return 1;
+//                }
+//                else
+//                    break;
+//            }
+//            // right-upwards:
+//            for (ii = i - 1, jj = j + 1; (ii >= 0) || (jj <= COLUMNS - 1); ii--, j++)
+//            {
+//                if (board[ii][jj] == color)
+//                {
+//                    count++;
+//                    if (count == FOUR)
+//                        return 1;
+//                }
+//                else
+//                    break;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+int wonCheck( int token){
 
-    for (j = 0; j < COLUMNS; j++)
-    {
-        for (i = ROWS - 1; i >= 0; i--)
-        {
-            if (count + i < FOUR) // if ROWS is less than 4, then no one can win vertically.
-                return 0;
-            if (count == FOUR)
-                return 1;
-            if (board[i][j] == color)
-                count++;
-            else
-                count = 0;
+    //score horizontal.
+    for (int i = 0; i < ROWS; ++i) {
+        int* row = board[i];
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (row[j+k] == token) count++;
+            }
+            if(count == FOUR) return 1;
         }
     }
-}
-
-/*
-    Requires: Nothing
-    Effects: Checks if the winning condition is satisfied horizentally.
-*/
-int checkHorizontal()
-{
-    int i, j;
-    int count = 0;
-    for (i = ROWS - 1; i >= 0; i--)
-    {
-        for (j = 0; j < COLUMNS; j++)
-        {
-            if (count + (COLUMNS - j) < FOUR) // If Columns are less than 4, then no one can win horizontally.
-                return 0;
-            if (count == FOUR)
-                return 1;
-            if (board[i][j] == color)
-                count++;
-            else
-                count = 0;
+    //score vertical
+    for (int i = 0; i < COLUMNS; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[j+k][i] == token) count++;
+            }
+            if(count == FOUR) return 1;
         }
     }
-}
-/*
-    Requires: Nothing//
-    Effects: Checks if the winning condition is satisfied Obliquely.
-*/
-int checkOblique()
-{
-    int i, j;
-    int count;
-
-    int ii, jj;
-    for (i = 1; i < ROWS - 1; i++)
-    {
-        for (j = 1; j < COLUMNS - 1; j++)
-        {
-
-            /*
-             left-tilted diagonals
-             */
-            count = 0;
-            // left-upwards:
-            for (ii = i, jj = j; (ii >= 0) || (jj >= 0); ii--, jj--)
-            {
-                if (board[ii][jj] == color)
-                {
-                    count++;
-                    if (count == FOUR)
-                        return 1;
-                }
-                else
-                    break;
+    //positively sloping
+    for (int i = 3; i < ROWS; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[i-k][j+k] == token) count++;
             }
-            // right-downwards:
-            for (ii = i + 1, jj = j + 1; (ii <= ROWS - 1) || (jj <= COLUMNS - 1); ii++, jj++)
-            {
-                if (board[ii][jj] == color)
-                {
-                    count++;
-                    if (count == FOUR)
-                        return 1;
-                }
-                else
-                    break;
-            }
-
-            /*
-              right-tilted diagonals
-             */
-            count = 0;
-            // left-downwards:
-            for (ii = i, jj = j; (ii <= ROWS - 1) || (jj >= 0); ii++, jj--)
-            {
-                if (board[ii][jj] == color)
-                {
-                    count++;
-                    if (count == FOUR)
-                        return 1;
-                }
-                else
-                    break;
-            }
-            // right-upwards:
-            for (ii = i - 1, jj = j + 1; (ii >= 0) || (jj <= COLUMNS - 1); ii--, j++)
-            {
-                if (board[ii][jj] == color)
-                {
-                    count++;
-                    if (count == FOUR)
-                        return 1;
-                }
-                else
-                    break;
-            }
+            if(count == FOUR) return 1;
         }
     }
-
+    //negatively sloping
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[i+k][j+k] == token) count++;
+            }
+            if(count == FOUR) return 1;
+        }
+    }
     return 0;
 }
 /*
@@ -288,14 +333,15 @@ int checkOblique()
 */
  int check()
 {
-    return checkHorizontal() || checkVertical() || checkOblique(); // player wins if either of these are satisfied.
+    return wonCheck(color);
+//    return checkHorizontal() || checkVertical() || checkOblique(); // player wins if either of these are satisfied.
 }
 /*
     requires nothing
     checks if the board is full
     board is full --> returns 1
 */
-int checkFull(){
+int checkIfFull(){
     for(int i = 0; i < ROWS;i++){
         for(int j = 0; j < COLUMNS; j++){
             if(board[i][j] == 0) return 0; // if one square is equal to 0, then the board is not full

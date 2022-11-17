@@ -8,6 +8,8 @@
 #define FOUR 4
 #define ROWS 6
 #define COLUMNS 7
+#define min(a,b) (((a)<(b))?(a):(b))
+#define max(a,b) (((a)>(b))?(a):(b))
 
 int BotToken = 2;
 int PlayerToken = 1;
@@ -88,9 +90,8 @@ int scoringMoves(int** board, int token){
 }
 int **copyBoard(int** board){
     int** copy = (int**)malloc(ROWS * sizeof(int*));
-    for (int i = 0; i < COLUMNS; i++)
-        copy[i] = (int*)malloc(COLUMNS * sizeof(int));
     for (int i = 0; i < ROWS; ++i) {
+        copy[i] = (int*)malloc(COLUMNS * sizeof(int));
         for (int j = 0; j < COLUMNS; ++j) {
             copy[i][j] = board[i][j];
         }
@@ -123,4 +124,129 @@ int bestMove(int **board, int token){
     }
     return bestCol;
 }
+int won(int** board, int token){
 
+    //score horizontal.
+    for (int i = 0; i < ROWS; ++i) {
+        int* row = board[i];
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (row[j+k] == token) count++;
+            }
+            if(count == FOUR) return 1;
+        }
+    }
+    //score vertical
+    for (int i = 0; i < COLUMNS; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[j+k][i] == token) count++;
+            }
+            if(count == FOUR) return 1;
+        }
+    }
+    //positively sloping
+    for (int i = 3; i < ROWS; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[i-k][j+k] == token) count++;
+            }
+            if(count == FOUR) return 1;
+        }
+    }
+    //negatively sloping
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int count = 0;
+            for (int k = 0; k <4; k++){
+                if (board[i+k][j+k] == token) count++;
+            }
+            if(count == FOUR) return 1;
+        }
+    }
+    return 0;
+}
+
+int checkFull(int **board){
+    for(int j = 0; j < COLUMNS; j++){
+        if(board[0][j] == 0) return 0; // if one square is equal to 0, then the board is not full
+    }
+    return 1; // all squares are full.
+}
+int isTerminalBoard(int **board){
+    return won(board, BotToken) || won(board, PlayerToken) || checkFull(board);
+}
+int *Minimax(int **board, int depth, int maximizing){
+    int botWon = won(board, BotToken);
+    int playerWon = won(board, PlayerToken);
+    int full = checkFull(board);
+    if( botWon || playerWon || full){
+        if(botWon){
+            int *result = (int*) malloc(2*sizeof(int));
+            result[0] = 100000000;
+            result[1] = -1;
+            return result;
+        }
+        else if(playerWon){
+            int *result = (int*) malloc(2*sizeof(int));
+            result[0] = -1000000;
+            result[1] = -1;
+            return result;
+        }
+        else {
+            int *result = (int*) malloc(2*sizeof(int));
+            result[0] = 0;
+            result[1] = -1;
+            return result;
+        }
+    }
+    else if(depth == 0){
+        int *result = (int*) malloc(2*sizeof(int));
+        result[0] = scoringMoves(board, BotToken);
+        result[1] = -1;
+        return result;
+    }
+    if(maximizing){
+        int value = INT_MIN;
+        int column = clock()%7;
+        for (int col = 0; col < COLUMNS; ++col) {
+            if(!board[0][col]){
+                int **copy = copyBoard(board);
+                dropPiece(copy, col, BotToken);
+                int newScore =  Minimax(copy, depth -1, 0)[0];
+                if(newScore > value){
+                    value = newScore;
+                    column = col;
+                }
+                free(copy);
+            }
+        }
+        int *result = (int*) malloc(2*sizeof(int));
+        result[0] = value;
+        result[1] = column;
+        return result;
+    }
+    else{
+        int value = INT_MAX;
+        int column = clock()%7;
+        for (int col = 0; col < COLUMNS; ++col) {
+            if(!board[0][col]){
+                int **copy = copyBoard(board);
+                dropPiece(copy, col, PlayerToken);
+                int newScore = Minimax(copy, depth -1, 1 )[0];
+                if(newScore < value){
+                    value = newScore;
+                    column = col;
+                }
+                free(copy);
+            }
+        }
+        int *result = (int*) malloc(2*sizeof(int));
+        result[0] = value;
+        result[1] = column;
+        return result;
+    }
+}
