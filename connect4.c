@@ -1,53 +1,56 @@
 #include <stdio.h>
 #include "./headerFiles/header.h"
 #include <time.h>
+#include <ctype.h>
+#include "Bot.h"
 
 #define FOUR 4
 #define ROWS 6
 #define COLUMNS 7
 
-char board[ROWS][COLUMNS];
+int** board;
 char header[] = "-----------------------------";
 char player1[30];
 char player2[30];
 clock_t player1Time = 0;
 clock_t player2Time = 0;
-char color;
+int color;
 
 int main()
 {
-    printf("\n Please enter your name player 1: ");
+    printf("\n Please enter your name: ");
     scanf_s("%s", &player1);
-    printf("\n Please enter your name player 2: ");
-    scanf_s("%s", &player2);
+    player2[0]='B';
+    player2[1]='o';
+    player2[2]='t';
     printf("\n %s is Heads %s is Tales \n", player1, player2);
     printf("Tossing coin ....\n");
     int toss = time(0) % 2;
     if(toss ==0){ // decides who gets to play first.
         printf("Heads: %s starts\n",player1);
-        color = '1';
+        color = 1;
     }
     else
     {
         printf("Tales: %s starts\n", player2);
-        color = '2';
+        color = 2;
     }
     init_board();
     printBoard();
 
     while (!checkFull())
     {
-        printf("Player %s, your turn!\n", (color == '1') ? player1 : player2);
+        printf("Player %s, your turn!\n", (color == 1) ? player1 : player2);
         clock_t before = clock();
         choose();
         clock_t diff = clock() - before; // records time taken by the player.
-        if(color == '1') player1Time += diff; // adds time taken.
+        if(color == 1) player1Time += diff; // adds time taken.
         else player2Time += diff;
         printf("\n\n");
         printBoard();
         if (check()) // checks if a player has won or not.
         {
-            printf("\n Player  %s wins! \n", (color == '1') ? player1 : player2);
+            printf("\n Player  %s wins! \n", (color == 1) ? player1 : player2);
             break;
         }
         Color(); // switches colors for next turn.
@@ -62,19 +65,20 @@ int main()
 
 void Color()
 {
-    color = (color == '1') ? '2' : '1'; // switches between colors for each round.
+    color = (color == 1) ? 2 : 1; // switches between colors for each round.
 }
 
 void init_board()
 {
     // fill the board with the empty character:
-    int i, j;
-
-    for (i = 0; i < ROWS; i++)
+    board = (int**)malloc(ROWS * sizeof(int*));
+    for (int i = 0; i < COLUMNS; i++)
+        board[i] = (int*)malloc(COLUMNS * sizeof(int));
+    for (int i = 0; i < ROWS; i++)
     {
-        for (j = 0; j < COLUMNS; j++)
+        for (int j = 0; j < COLUMNS; j++)
         {
-            board[i][j] = '0';
+            board[i][j] = 0;
         }
     }
 }
@@ -93,7 +97,7 @@ void init_board()
     {
         for (j = 0; j < COLUMNS; j++)
         {
-            printf("| %c ", board[i][j]);
+            printf("| %d ", board[i][j]);
         }
         printf("|\n");
     }
@@ -104,7 +108,7 @@ void init_board()
     requires(nothing)
     switch cases are used to filter out all unwanted user inputs
     error--> returns -1
-    else --> returns colomn number to write to
+    else --> returns column number to write to
 */
 void choose()
 {
@@ -112,15 +116,18 @@ void choose()
     int column = -1;
     while (column == -1) // as long as we haven't found an empty square yet.
     {
-        printf("\nChoose column: ");
-        scanf_s("%d", &c);
-        printf("%d",isdigit(c));
-        if( !isdigit(c) ) 
-            column = c-1;
-        else {
-            printf("\nWrong column number\n");
-            printBoard();
+        if(color == 1){
+            printf("\nChoose column: ");
+            scanf_s("%d", &c);
+            if( !isdigit(c) )
+                column = c-1;
+            else {
+                printf("\nWrong column number\n");
+                printBoard();
+            }
         }
+        else column = bestMove(board,2);
+
         //checks for filled columns
         column = (fill_bin(column) == 1) ? 1 : -1;
 
@@ -139,7 +146,7 @@ int fill_bin(int column)
 
     for (level = ROWS - 1; level >= 0; level--)
     {
-        if (board[level][column] == '0') // checks for an empty square from the bottom up in the column.
+        if (board[level][column] == 0) // checks for an empty square from the bottom up in the column.
         {
             board[level][column] = color;
             fail = 1;
@@ -291,7 +298,7 @@ int checkOblique()
 int checkFull(){
     for(int i = 0; i < ROWS;i++){
         for(int j = 0; j < COLUMNS; j++){
-            if(board[i][j] == '0') return 0; // if one square is equal to 0, then the board is not full
+            if(board[i][j] == 0) return 0; // if one square is equal to 0, then the board is not full
         }
     }
     return 1; // all squares are full.
