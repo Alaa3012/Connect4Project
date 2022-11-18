@@ -114,6 +114,7 @@ void choose()
 {
     int c;
     int column = -1;
+    int i = 0;
     while (column == -1) // as long as we haven't found an empty square yet.
     {
         if(color == 1){
@@ -126,8 +127,9 @@ void choose()
                 printBoard();
             }
         }
-        else column = Minimax(board, 10, INT_MIN, INT_MAX, 1)[1];
 
+        else column = Minimax(board, 8+i, INT_MIN, INT_MAX, 1)[1];
+        i+=2;
         //checks for filled columns
         column = (fill_bin(column) == 1) ? 1 : -1;
 
