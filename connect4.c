@@ -126,7 +126,7 @@ void choose()
                 printBoard();
             }
         }
-        else column = Minimax(board, 7, 1)[1];
+        else column = Minimax(board, 10, INT_MIN, INT_MAX, 1)[1];
 
         //checks for filled columns
         column = (fill_bin(column) == 1) ? 1 : -1;

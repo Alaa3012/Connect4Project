@@ -17,16 +17,16 @@ int PlayerToken = 1;
 int calculateScore(int count, int countEmpty, int countEnemy){
     int score = 0;
     if( count == FOUR ) score+= 100;
-    else if(count == 3 && countEmpty == 1) score += 10;
-    else if(count == 2 && countEmpty == 2) score += 5;
-    if (countEnemy == 3 && countEmpty == 1) score -= 80;
+    else if(count == 3 && countEmpty == 1) score += 5;
+    else if(count == 2 && countEmpty == 2) score += 2;
+    if (countEnemy == 3 && countEmpty == 1) score -= 4;
     return score;
 }
 int scoringMoves(int** board, int token){
     int enemyToken = (token == BotToken)? PlayerToken : BotToken;
     int score = 0;
     for (int i = 0; i < ROWS; ++i) {
-        if(board[i][3] == token) score += 6;
+        if(board[i][3] == token) score += 3;
     }
     //score horizontal.
     for (int i = 0; i < ROWS; ++i) {
@@ -179,7 +179,7 @@ int checkFull(int **board){
 int isTerminalBoard(int **board){
     return won(board, BotToken) || won(board, PlayerToken) || checkFull(board);
 }
-int *Minimax(int **board, int depth, int maximizing){
+int *Minimax(int **board, int depth, int alpha, int beta, int maximizing){
     int botWon = won(board, BotToken);
     int playerWon = won(board, PlayerToken);
     int full = checkFull(board);
@@ -216,11 +216,13 @@ int *Minimax(int **board, int depth, int maximizing){
             if(!board[0][col]){
                 int **copy = copyBoard(board);
                 dropPiece(copy, col, BotToken);
-                int newScore =  Minimax(copy, depth -1, 0)[0];
+                int newScore =  Minimax(copy, depth -1, alpha,beta, 0)[0];
                 if(newScore > value){
                     value = newScore;
                     column = col;
                 }
+                alpha = max(alpha, value);
+                if (alpha > beta) break;
                 free(copy);
             }
         }
@@ -236,11 +238,13 @@ int *Minimax(int **board, int depth, int maximizing){
             if(!board[0][col]){
                 int **copy = copyBoard(board);
                 dropPiece(copy, col, PlayerToken);
-                int newScore = Minimax(copy, depth -1, 1 )[0];
+                int newScore = Minimax(copy, depth -1, alpha, beta, 1 )[0];
                 if(newScore < value){
                     value = newScore;
                     column = col;
                 }
+                beta = min(beta, value);
+                if (alpha >= beta) break;
                 free(copy);
             }
         }
